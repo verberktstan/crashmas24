@@ -1,4 +1,5 @@
-(ns utils)
+(ns aoc.utils
+ (:require [clojure.java.io :as io]))
 
 (def read-lines (comp line-seq io/reader))
 
