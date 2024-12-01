@@ -2,7 +2,7 @@
   (:require
    [clojure.test :refer [deftest is]]
    [aoc.core :as sut]
-   [utils :as u]))
+   [aoc.utils :as u]))
 
 (deftest part-one
   (is (= 2000468
