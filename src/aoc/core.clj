@@ -1,6 +1,5 @@
 (ns aoc.core
   (:require
-   [clojure.java.io :as io]
    [clojure.string :as str]
    [clojure.edn :as edn]))
 
