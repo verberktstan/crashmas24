@@ -1,1 +1,19 @@
-{}
+{:deps
+ ;; Clojure standard library
+ {org.clojure/clojure {:mvn/version "1.11.0"}}
+
+:aliases
+  ;; kaocha - comprehensive test runner for Clojure/Script
+  ;; tests.edn should be created for each project
+  ;; https://github.com/lambdaisland/kaocha
+
+  ;; Default test runner using kaocha (change to your own preference)
+  ;; clojure -X:test/run
+  ;; clojure -X:test/run :fail-fast true
+  {:test/run
+    {:extra-paths ["test"]
+     :extra-deps  {lambdaisland/kaocha {:mvn/version "1.80.1274"}}
+     :main-opts   ["-m" "kaocha.runner"]
+     :exec-fn     kaocha.runner/exec-fn
+     :exec-args   {:randomize? false
+                   :fail-fast? true}}}}

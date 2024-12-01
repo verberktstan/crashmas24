@@ -7,7 +7,7 @@
 (def read-lines (comp line-seq io/reader))
 
 (def parse-line (comp (partial mapv edn/read-string)
-                      (fn [s] (str/split s #"\s+"))))
+                      #(str/split % #"\s+")))
 
 ;; TODO: Factor sort functionality out of this function..
 (def pivot-sort (juxt (comp sort (partial map first))
@@ -26,12 +26,3 @@
           nil)
          vals
          (reduce +))))
-
-(comment
-  ;; Day 1 - Part 1 solution; Sum distances between left and right lists
-  (->> "resources/day1input.txt" read-lines (map parse-line) pivot-sort (apply map distance) (reduce +)) ; => 2000468
-
-  ;; Day 1 - Part 2 solution; Sum similarity between left and right lists
-  (->> "resources/day1input.txt" read-lines (map parse-line) pivot-sort similarity) ; => 18567089
-  )
-
