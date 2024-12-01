@@ -1,21 +1,8 @@
 (ns aoc.day1-test
-  (:require
-   [clojure.test :refer [deftest is]]
-   [aoc.core :as sut]))
+  (:require [clojure.test :refer [are deftest]]
+            [aoc.core :as sut]))
 
-(deftest part-one
-  (is (= 2000468
-        (->> "resources/day1input.txt"
-          sut/read-lines
-          (map sut/parse-line)
-          sut/pivot-sort
-          (apply map sut/distance)
-          (reduce +)))))
-  
-(deftest part-two
-  (is (= 18567089
-        (->> "resources/day1input.txt"
-          sut/read-lines
-          (map sut/parse-line)
-          sut/pivot-sort
-          sut/similarity))))
+(deftest day1
+  (are [f result] (-> {:filename "resources/day1input.txt"} f (= result))
+    sut/part-one 2000468
+    sut/part-two 18567089))
