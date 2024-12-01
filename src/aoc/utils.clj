@@ -7,9 +7,9 @@
   "Wrapper that reads, parses and finally reduces lines."
   [{:keys [filename parser reducer] 
     :or {parser identity, reducer +}} & fs]
-  (let [f (apply comp fs)]
-    (->> filename
-      read-lines
-      (map parser)
-      f
-      (reduce reducer))))
+  (let [f (some->> fs reverse (apply comp))]
+    (cond->> filename
+      :always read-lines
+      parser  (map parser)
+      f       f
+      reducer (reduce reducer))))
