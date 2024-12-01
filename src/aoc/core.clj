@@ -23,5 +23,4 @@
   (let [[left right] (map frequencies coll)]
     (->> left
          (reduce-kv (location-lookup right) nil)
-         vals
-         (reduce +))))
+         vals)))
