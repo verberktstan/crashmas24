@@ -5,8 +5,8 @@
 
 (defn rearseduce
   "Wrapper that reads, parses and finally reduces lines."
-  [{:keys [filename parser reducer] 
-    :or {parser identity, reducer +}} & fs]
+  [{:keys [filename parser reducer]} & fs]
+  (-> filename string? assert)
   (let [f (some->> fs reverse (apply comp))]
     (cond->> filename
       :always read-lines
