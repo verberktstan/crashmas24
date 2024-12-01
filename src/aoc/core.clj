@@ -13,7 +13,7 @@
 
 (defn part-one [props]
   (u/rearseduce
-    (assoc props :parser parse-line)
+    (assoc props :parser parse-line :reducer +)
     pivot
     (partial map sort)
     (partial apply map distance)))
@@ -32,6 +32,6 @@
 
 (defn part-two [props]
   (u/rearseduce
-    (assoc props :parser parse-line)
+    (assoc props :parser parse-line :reducer +)
     pivot
     similarity))
