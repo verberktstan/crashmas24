@@ -1,5 +1,6 @@
 (ns aoc.core
   (:require
+   [aoc.utils :as u]
    [clojure.string :as str]
    [clojure.edn :as edn]))
 
@@ -11,6 +12,13 @@
                       (comp sort (partial map second))))
 
 (def distance (comp abs -))
+
+(defn distancex []
+  (u/rearseduce
+    {:filename "resources/day1input.txt"
+     :parser sut/parse-line}
+    (partial apply map distance)
+    pivot-sort))
 
 (defn- location-lookup [right]
   (fn [m location-id frequency]
