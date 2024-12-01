@@ -9,16 +9,14 @@
 
 (def pivot (juxt (partial map first) (partial map second)))
 
-(def sort-multiple (partial map sort))
-
 (def distance (comp abs -))
 
 (defn part-one [props]
   (u/rearseduce
     (assoc props :parser parse-line)
-    (partial apply map distance)
-    sort-multiple
-    pivot))
+    pivot
+    (partial map sort)
+    (partial apply map distance)))
 
 (defn- location-lookup [right]
   (fn [m location-id frequency]
@@ -35,5 +33,5 @@
 (defn part-two [props]
   (u/rearseduce
     (assoc props :parser parse-line)
-    similarity
-    pivot))
+    pivot
+    similarity))
