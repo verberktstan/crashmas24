@@ -1,6 +1,6 @@
 (ns utils)
 
-(declare read-lines)
+(def read-lines (comp line-seq io/reader))
 
 (defn rearseduce
   "Wrapper that reads, parses and finally reduces lnes."
