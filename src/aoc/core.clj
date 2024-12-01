@@ -4,8 +4,6 @@
    [clojure.string :as str]
    [clojure.edn :as edn]))
 
-(def read-lines (comp line-seq io/reader))
-
 (def parse-line (comp (partial mapv edn/read-string)
                       #(str/split % #"\s+")))
 
