@@ -6,11 +6,7 @@
 
 (deftest part-one
   (is (= 2000468
-        (u/rearseduce {:filename "resources/day1input.txt"
-                        :parser sut/parse-line}
-          #(->> %
-            sut/pivot-sort
-            (apply map sut/distance))))))
+        (sut/distancex))))
   
 #_(deftest part-two
   (is (= 18567089
