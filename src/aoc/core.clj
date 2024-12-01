@@ -7,9 +7,9 @@
 (def parse-line (comp (partial mapv edn/read-string)
                       #(str/split % #"\s+")))
 
-;; TODO: Factor sort functionality out of this function..
-(def pivot-sort (juxt (comp sort (partial map first))
-                      (comp sort (partial map second))))
+(def pivot (juxt (partial map first) (partial map second)))
+
+(def sort-multiple (partial map sort))
 
 (def distance (comp abs -))
 
@@ -17,7 +17,8 @@
   (u/rearseduce
     (assoc props :parser parse-line)
     (partial apply map distance)
-    pivot-sort))
+    sort-multiple
+    pivot))
 
 (defn- location-lookup [right]
   (fn [m location-id frequency]
@@ -35,4 +36,4 @@
   (u/rearseduce
     (assoc props :parser parse-line)
     similarity
-    pivot-sort))
+    pivot))
