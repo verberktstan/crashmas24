@@ -1,4 +1,8 @@
-{:aliases
+{:deps
+ ;; Clojure standard library
+ {org.clojure/clojure {:mvn/version "1.11.0"}}
+
+:aliases
   ;; kaocha - comprehensive test runner for Clojure/Script
   ;; tests.edn should be created for each project
   ;; https://github.com/lambdaisland/kaocha
