@@ -13,10 +13,9 @@
 
 (def distance (comp abs -))
 
-(defn distancex []
+(defn part-one [props]
   (u/rearseduce
-    {:filename "resources/day1input.txt"
-     :parser   parse-line}
+    (assoc props :parser parse-line)
     (partial apply map distance)
     pivot-sort))
 
@@ -26,8 +25,14 @@
       (cond-> m
         similarity (update location-id (fnil + 0) similarity)))))
 
-(defn similarity [coll]
+(defn- similarity [coll]
   (let [[left right] (map frequencies coll)]
     (->> left
          (reduce-kv (location-lookup right) nil)
          vals)))
+
+(defn part-two [props]
+  (u/rearseduce
+    (assoc props :parser parse-line)
+    similarity
+    pivot-sort))
