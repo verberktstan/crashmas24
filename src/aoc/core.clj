@@ -15,14 +15,15 @@
 
 (def distance (comp abs -))
 
+(defn- location-lookup [right]
+  (fn [m location-id frequency]
+    (let [similarity (some-> location-id right (* location-id frequency))]
+      (cond-> m
+        similarity (update location-id (fnil + 0) similarity)))))
+
 (defn similarity [coll]
   (let [[left right] (map frequencies coll)]
     (->> left
-         (reduce-kv
-          (fn [m location-id frequency]
-            (let [similarity (some-> right (get location-id) (* location-id frequency))]
-              (cond-> m
-                similarity (update location-id (fnil + 0) similarity))))
-          nil)
+         (reduce-kv (location-lookup right) nil)
          vals
          (reduce +))))
