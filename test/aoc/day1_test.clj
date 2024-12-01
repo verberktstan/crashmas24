@@ -12,6 +12,14 @@
           (apply map sut/distance)
           (reduce +)))))
   
+(deftest part-two
+  (is (= 2000468 ;; this should fail
+        (->> "resources/day1input.txt"
+          sut/read-lines
+          (map sut/parse-line)
+          sut/pivot-sort
+          sut/similarity))))
+
 (comment
   ;; Day 1 - Part 1 solution; Sum distances between left and right lists
   (->> "resources/day1input.txt" read-lines (map parse-line) pivot-sort (apply map distance) (reduce +)) ; => 2000468
