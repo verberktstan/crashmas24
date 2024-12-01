@@ -16,7 +16,7 @@
 (defn distancex []
   (u/rearseduce
     {:filename "resources/day1input.txt"
-     :parser sut/parse-line}
+     :parser   parse-line}
     (partial apply map distance)
     pivot-sort))
 
