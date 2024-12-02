@@ -3,7 +3,7 @@
 
 (def read-lines (comp line-seq io/reader))
 
-(defn rearseduce
+(defn transmute
   "Wrapper that reads, parses and finally reduces lines."
   [{:keys [filename parser reducer]} & fs]
   (-> filename string? assert)
