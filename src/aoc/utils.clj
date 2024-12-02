@@ -1,4 +1,5 @@
 (ns aoc.utils
+  (:refer-clojure :rename {dissoc core-dissoc})
   (:require [clojure.edn :as edn]
             [clojure.java.io :as io]
             [clojure.string :as str]))
@@ -20,3 +21,12 @@
         parser  (map parser)
         pipe-fn pipe-fn
         reducer (reduce reducer)))))
+
+(defn dissoc
+  "clojure.core/dissoc on steroids"
+  ([coll]
+   (fn [i & _] (dissoc coll i)))
+  ([coll i]
+   (if (map? coll)
+     (core-dissoc coll i)
+     (->> (assoc (vec coll) i nil) (keep identity)))))
