@@ -5,7 +5,7 @@
    [clojure.edn :as edn]))
 
 (defn- transmuter [& functions]
-  #(apply u/transmute % functions))
+  (fn [props] (apply u/transmute props functions)))
 
 ;; Day 1 - Part one / pivot, sort, distance
 
