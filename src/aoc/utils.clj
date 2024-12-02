@@ -10,7 +10,7 @@
 ;; Wrapper that reads, parses and finally reduces lines.
 (defn transmute
   [& functions]
-  (let [f (some->> functions reverse (apply comp))]
+  (let [pipe-fn (some->> functions reverse (apply comp))]
     (partial
      apply
      (fn transmutor
@@ -18,8 +18,7 @@
          :or   {parser  default-parser
                 reducer +}}]
        (-> filename string? assert)
-       (cond->> filename
-         :always read-lines
+       (cond->> (read-lines filename)
          parser  (map parser)
-         f       f
+         pipe-fn pipe-fn
          reducer (reduce reducer))))))
