@@ -12,9 +12,9 @@
 (def distance (comp abs -))
 
 
-(defn transmuter [& fs]
+(defn- transmuter [& fs]
   (comp
-    #(apply u/transmute * fs)
+    #(apply u/transmute % fs)
     (partial merge {:parser parse-line :reducer +})))
 
 
