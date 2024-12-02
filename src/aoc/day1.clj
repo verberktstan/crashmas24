@@ -4,11 +4,8 @@
    [clojure.string :as str]
    [clojure.edn :as edn]))
 
-(let [props nil]
-  (defn- transmuter [& functions]
-    (comp
-      #(apply u/transmute % functions)
-      (partial merge props))))
+(defn- transmuter [& functions]
+  #(apply u/transmute % functions))
 
 ;; Day 1 - Part one / pivot, sort, distance
 
