@@ -5,7 +5,9 @@
 
 (defn transmute
   "Wrapper that reads, parses and finally reduces lines."
-  [{:keys [filename parser reducer]} & fs]
+  [{:keys [filename parser reducer]
+    :or {parser (comp (partial mapv edn/read-string)  #(str/split % #"\s+"))}
+         reducer +} & fs]
   (-> filename string? assert)
   (let [f (some->> fs reverse (apply comp))]
     (cond->> filename
