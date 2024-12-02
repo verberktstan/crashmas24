@@ -11,9 +11,15 @@
 
 (def distance (comp abs -))
 
-(defn part-one [props]
-  (u/transmute
-    (assoc props :parser parse-line :reducer +)
+
+(defn transmuter [& fs]
+  (comp
+    #(apply u/transmute * fs)
+    (partial merge {:parser parse-line :reducer +})))
+
+
+(def part-one
+  (transmuter
     pivot
     (partial map sort)
     (partial apply map distance)))
