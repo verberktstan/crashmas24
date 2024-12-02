@@ -4,7 +4,7 @@
    [clojure.string :as str]
    [clojure.edn :as edn]))
 
-(let [props {:reducer +}]
+(let [props nil]
   (defn- transmuter [& functions]
     (comp
       #(apply u/transmute % functions)
