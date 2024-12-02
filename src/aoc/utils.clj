@@ -20,3 +20,8 @@
         parser  (map parser)
         pipe-fn pipe-fn
         reducer (reduce reducer)))))
+
+(defn ohne [f k]
+  (-> f fn? assert)
+  (-> k #{:reducer :parser} assert)
+  (comp f (partial merge {k nil})))
