@@ -2,16 +2,15 @@
   (:require [aoc.utils :as u]))
 
 ;; Day 1 - Part one; pivot, sort, distance
-
 (def pivot (juxt (partial map first) (partial map second)))
 
 (def distance (comp abs -))
 
-(def part-one
+(def part-one 
   (u/transmute pivot (partial map sort) (partial apply map distance)))
 
-;; Day 1 - Part two; pivot, similarity
 
+;; Day 1 - Part two; pivot, similarity
 (defn- location-lookup [right]
   (fn [m location-id frequency]
     (let [similarity (some-> location-id right (* location-id frequency))]
