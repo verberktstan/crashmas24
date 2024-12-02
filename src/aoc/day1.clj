@@ -12,7 +12,7 @@
 (def distance (comp abs -))
 
 (defn part-one [props]
-  (u/rearseduce
+  (u/transmute
     (assoc props :parser parse-line :reducer +)
     pivot
     (partial map sort)
@@ -31,7 +31,7 @@
          vals)))
 
 (defn part-two [props]
-  (u/rearseduce
+  (u/transmute
     (assoc props :parser parse-line :reducer +)
     pivot
     similarity))
