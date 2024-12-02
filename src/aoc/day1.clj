@@ -7,22 +7,17 @@
 (def parse-line (comp (partial mapv edn/read-string)
                       #(str/split % #"\s+")))
 
+(defn- transmuter [& functions]
+  (comp
+    #(apply u/transmute % functions)
+    (partial merge {:parser parse-line :reducer +})))
+
 (def pivot (juxt (partial map first) (partial map second)))
 
 (def distance (comp abs -))
 
-
-(defn- transmuter [& fs]
-  (comp
-    #(apply u/transmute % fs)
-    (partial merge {:parser parse-line :reducer +})))
-
-
 (def part-one
-  (transmuter
-    pivot
-    (partial map sort)
-    (partial apply map distance)))
+  (transmuter pivot (partial map sort) (partial apply map distance)))
 
 (defn- location-lookup [right]
   (fn [m location-id frequency]
@@ -36,8 +31,5 @@
          (reduce-kv (location-lookup right) nil)
          vals)))
 
-(defn part-two [props]
-  (u/transmute
-    (assoc props :parser parse-line :reducer +)
-    pivot
-    similarity))
+(def part-two
+  (transmuter pivot similarity))
