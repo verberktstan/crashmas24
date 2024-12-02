@@ -4,13 +4,12 @@
    [clojure.string :as str]
    [clojure.edn :as edn]))
 
-(def parse-line (comp (partial mapv edn/read-string)
-                      #(str/split % #"\s+")))
-
-(defn- transmuter [& functions]
-  (comp
-    #(apply u/transmute % functions)
-    (partial merge {:parser parse-line :reducer +})))
+(let [props {:parser (comp (partial mapv edn/read-string)  #(str/split % #"\s+"))
+             :reducer +}]
+  (defn- transmuter [& functions]
+    (comp
+      #(apply u/transmute % functions)
+      (partial merge props))))
 
 ;; Day 1 - Part one / pivot, sort, distance
 
