@@ -4,12 +4,8 @@
    [clojure.string :as str]
    [clojure.edn :as edn]))
 
-(let [props {:parser (comp (partial mapv edn/read-string)  #(str/split % #"\s+"))
-             :reducer +}]
-  (defn- transmuter [& functions]
-    (comp
-      #(apply u/transmute % functions)
-      (partial merge props))))
+(defn- transmuter [& functions]
+  (fn [props] (apply u/transmute props functions)))
 
 ;; Day 1 - Part one / pivot, sort, distance
 

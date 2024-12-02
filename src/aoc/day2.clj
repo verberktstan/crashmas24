@@ -1,15 +1,11 @@
 (ns aoc.day2
   (:require
-   [aoc.utils :as u]
-   [clojure.string :as str]
-   [clojure.edn :as edn]))
+   [aoc.utils :as u]))
 
-(let [props {:parser #(->> (str/split % #"\s") (map edn/read-string))
-             :reducer nil}]
-  (defn- transmuter [& functions]
-    (comp
-     #(apply u/transmute % functions)
-     (partial merge props))))
+(defn- transmuter [& functions]
+  (comp
+   #(apply u/transmute % functions)
+   (partial merge {:reducer nil})))
 
 ;; Day 2 - Part one
 

@@ -1,4 +1,4 @@
-(ns aoc.day1-test
+(ns aoc.crashmas-test
   (:require [clojure.test :refer [are deftest]]
             [aoc.day1 :as day1]
             [aoc.day2 :as day2]))
