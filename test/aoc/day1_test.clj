@@ -10,5 +10,4 @@
 
 (deftest day2
   (are [f result] (-> {:filename "resources/day2input.txt"} f (= result))
-    day2/part-one 2000468
-    #_#_day2/part-two 18567089))
+    day2/part-one 359))
