@@ -1,6 +1,6 @@
 (ns aoc.day1-test
   (:require [clojure.test :refer [are deftest]]
-            [aoc.core :as sut]))
+            [aoc.day1 :as sut]))
 
 (deftest day1
   (are [f result] (-> {:filename "resources/day1input.txt"} f (= result))
