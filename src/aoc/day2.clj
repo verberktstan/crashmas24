@@ -9,12 +9,12 @@
     (some-> b adjacent?)))
 
 (defn- safe? [coll]
-  (and (or (apply < coll) (apply > coll))
-       (reduce adjacent-levels coll)))
+  (and (or (apply < coll) (apply > coll) nil)
+       (reduce adjacent-levels coll)
+       1)) ; Return the count of 1 in case of a safe report
 
 (def part-one
-  (-> (u/transmute (partial filter safe?) count) (u/ohne :reducer)))
-
+  (u/transmute (partial keep safe?)))
 
 ;; Day 2 - Part two; Find tolerated reports with the Problem Dampener
 (defn- problem-dampener [coll]
@@ -23,4 +23,4 @@
        (some safe?)))
 
 (def part-two
-  (-> (u/transmute (partial filter problem-dampener) count) (u/ohne :reducer)))
+  (u/transmute (partial keep problem-dampener)))
