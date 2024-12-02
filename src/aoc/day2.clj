@@ -1,11 +1,5 @@
 (ns aoc.day2
-  (:require
-   [aoc.utils :as u]))
-
-;; TODO: Could be a simple transducer as well? Refactor that..
-(defn- transmuter [& functions]
-  (comp #(apply u/transmute % functions)
-        (partial merge {:reducer nil})))
+  (:require [aoc.utils :as u]))
 
 ;; Day 2 - Part one; Find safe 'Red-Nosed Reactor' reports
 
@@ -20,9 +14,10 @@
        (reduce adjacent-levels coll)))
 
 (def part-one
-  (transmuter (partial filter safe?) count))
+  (comp (u/transmute (partial filter safe?) count)
+        (partial merge {:reducer nil})))
 
-;; Day 2 - Part two; Tolerated reports with the Problem Dampener
+;; Day 2 - Part two; Find tolerated reports with the Problem Dampener
 
 (defn- problem-dampener [coll]
   (->> (for [i (-> coll count range)]
@@ -30,4 +25,5 @@
        (some safe?)))
 
 (def part-two
-  (transmuter (partial filter problem-dampener) count))
+  (comp (u/transmute (partial filter problem-dampener) count)
+        (partial merge {:reducer nil})))
