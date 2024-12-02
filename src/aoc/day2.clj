@@ -30,4 +30,4 @@
        (some safe?)))
 
 (def part-two
-  (transmuter (filter problem-dampener) count))
+  (transmuter (partial filter problem-dampener) count))
