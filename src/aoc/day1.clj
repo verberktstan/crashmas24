@@ -1,8 +1,6 @@
 (ns aoc.day1
   (:require
-   [aoc.utils :as u]
-   [clojure.string :as str]
-   [clojure.edn :as edn]))
+   [aoc.utils :as u]))
 
 (defn- transmuter [& functions]
   (fn [props] (apply u/transmute props functions)))
