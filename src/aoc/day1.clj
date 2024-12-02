@@ -1,12 +1,12 @@
 (ns aoc.day1
-  (:require [aoc.utils :as u]))
+  (:require [aoc.utils :refer [transmute]]))
 
 ;; Day 1 - Part one; pivot, sort, distance
 (def pivot (juxt (partial map first) (partial map second)))
 
 (def distance (comp abs -))
 
-(def part-one (u/transmute pivot (partial map sort) (partial apply map distance)))
+(def part-one (transmute pivot (partial map sort) (partial apply map distance)))
 
 ;; Day 1 - Part two; pivot, similarity
 (defn- location-lookup [right]
@@ -18,4 +18,4 @@
   (let [[left right] (map frequencies coll)]
     (->> left (reduce-kv (location-lookup right) nil) vals)))
 
-(def part-two (u/transmute pivot similarity))
+(def part-two (transmute pivot similarity))
