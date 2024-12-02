@@ -12,12 +12,16 @@
     #(apply u/transmute % functions)
     (partial merge {:parser parse-line :reducer +})))
 
+;; Day 1 - Part one / pivot, sort, distance
+
 (def pivot (juxt (partial map first) (partial map second)))
 
 (def distance (comp abs -))
 
 (def part-one
   (transmuter pivot (partial map sort) (partial apply map distance)))
+
+;; Day 1 - Part two / pivot, similarity
 
 (defn- location-lookup [right]
   (fn [m location-id frequency]
