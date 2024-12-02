@@ -4,8 +4,7 @@
    [clojure.string :as str]
    [clojure.edn :as edn]))
 
-(let [props {:parser (comp (partial mapv edn/read-string)  #(str/split % #"\s+"))
-             :reducer +}]
+(let [props {:reducer +}]
   (defn- transmuter [& functions]
     (comp
       #(apply u/transmute % functions)
