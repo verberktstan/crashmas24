@@ -5,12 +5,12 @@
             [aoc.day3 :as day3]))
 
 (deftest crashmas-test
-  (are [filename f result] (-> {:filename filename} f (= result))
-    "resources/day1.txt" day1/part-one 2000468
-    "resources/day1.txt" day1/part-two 18567089
+  (are [f result] (-> (f) (= result))
+    day1/part-one 2000468
+    day1/part-two 18567089
 
-    "resources/day2.txt" day2/part-one 359
-    "resources/day2.txt" day2/part-two 418
+    day2/part-one 359
+    day2/part-two 418
 
-    "resources/day3.txt" day3/part-one 189527826
-    "resources/day3.txt" day3/part-two 69247082))
+    day3/part-one 189527826
+    day3/part-two 69247082))
