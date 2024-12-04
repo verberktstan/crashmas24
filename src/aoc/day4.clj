@@ -4,21 +4,20 @@
             [clojure.string :as str]))
 
 ;; Day 4 - Part one;
-
 (defn- rotate
   "Returns coll rotated n steps, doesn't wrap but injects nil when rotate would wrap."
   [n coll]
   (if (zero? n)
     (seq coll)
-    (let [cnt     (count coll)
-          postfix (when (pos? n) (repeat n nil))
-          prefix  (when (neg? n) (repeat (abs n) nil))
-          drop*   (if (neg? n) drop-last drop)]
-      (as-> (drop* (abs n) coll) coll
+    (let [negative? (neg? n)
+          cnt       (count coll)
+          postfix   (when (pos? n) (repeat n nil))
+          prefix    (when negative? (repeat (abs n) nil))]
+      (as-> ((if negative? drop-last drop) (abs n) coll) coll
         (take cnt coll)
         (concat prefix coll postfix)))))
 
-(def pivot* (partial apply mapv vector))
+(def pivot* (memoize (partial apply mapv vector)))
 
 (defn- pivot [lines]
   {:horizontal     (pmap seq lines)
@@ -26,7 +25,7 @@
    :diagonal-right (->> lines (pmap rotate (range 4)) pivot*)
    :diagonal-left  (->> lines (pmap rotate (range 0 -4 -1)) pivot*)})
 
-(def check* (comp seq (partial filter #{[\X \M \A \S] [\S \A \M \X]})))
+(def check* (memoize (comp seq (partial filter #{[\X \M \A \S] [\S \A \M \X]}))))
 
 (defn- check [offset {:keys [horizontal vertical diagonal-right diagonal-left] :as m}]
 
