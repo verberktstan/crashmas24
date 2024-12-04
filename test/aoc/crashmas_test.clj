@@ -12,4 +12,5 @@
     "resources/day2.txt" day2/part-one 359
     "resources/day2.txt" day2/part-two 418
 
-    "resources/day3.txt" day3/part-one 189527826))
+    "resources/day3.txt" day3/part-one 189527826
+    "resources/day3.txt" day3/part-two 69247082))
