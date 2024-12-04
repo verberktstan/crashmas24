@@ -1,10 +1,10 @@
 (ns aoc.day4
   (:require [aoc.utils :refer [transmute]]))
 
-;; Day 4 - Part one;
+;; Day 4 - Part one; XMAS word search
 (defn- rotate
   "Returns coll rotated n steps, doesn't wrap but injects nil when rotate would wrap."
-  [n coll]
+   [n coll]
   (if (zero? n)
     (seq coll)
     (let [negative? (neg? n)
@@ -15,15 +15,34 @@
         (take cnt coll)
         (concat prefix coll postfix)))))
 
+(defn- rotate2 [n coll]
+  {:position/x (some-> n #{-1 1}) :coll (rotate n coll)})
+
 (def pivot* (memoize (partial apply mapv vector)))
-(defn- diagonal [range lines] (->> lines (pmap rotate range) pivot*))
+
+(defn pivot** [index args]
+  (->> args
+       (map :coll)
+       pivot*
+       (map-indexed
+        (fn [i triplet]
+          {:triplet triplet
+           :position/x (->> args (keep :position/x) first (+ i))
+           :position/y index}))))
+
+(defn- diagonal
+  ([range lines] (->> lines (pmap rotate range) pivot*))
+  ([index range lines] (->> lines (pmap rotate2 range) (pivot** index))))
 
 (defn- pivot
   "Returns pivoted sequences (like permutations) based on the lines; horizontal, vertial and diagonal."
-  [lines]
-  {:horizontal (pmap seq lines)
-   :vertical   (pivot* lines)
-   :diagonal   (concat (diagonal (range 4) lines) (diagonal (range 0 -4 -1) lines))})
+  ([lines]
+   {:horizontal (pmap seq lines)
+    :vertical   (pivot* lines)
+    :diagonal   (concat (diagonal (range 4) lines) (diagonal (range 0 -4 -1) lines))})
+  ([index lines] ; This one just checks X's of diagonals of 3 characters
+   {:diagonal1 (diagonal index (range 3) lines)
+    :diagonal2 (diagonal index (range 0 -3 -1) lines)}))
 
 (def check* (memoize (comp seq (partial filter #{[\X \M \A \S] [\S \A \M \X]}))))
 
@@ -56,7 +75,27 @@
                    (partial map-indexed check)
                    (partial reduce clean-horizontal-matches nil)
                    (partial sum-horizontal-matches)
-                   (partial vals))
+                   vals)
         (partial merge {:parser nil :filename "resources/day4.txt"})))
 
-;; (part-one nil) 
+;; Day 4 - Part two; X-MAS word search
+
+(let [mas? #{[\M \A \S] [\S \A \M]}]
+  (defn- x-mas? [coll]
+    (and (->> coll (take 3) mas?) (->> coll (drop 3) mas?) 1)))
+
+(let [key-by-position #(->> % (map (juxt (juxt :position/y :position/x) :triplet)) (into {}))]
+  (def merge-triplets
+    (partial
+     reduce
+     (fn [coll {:keys [diagonal1 diagonal2]}]
+       (merge coll (merge-with concat (key-by-position diagonal1) (key-by-position diagonal2))))
+     nil)))
+
+(def part-two
+  (comp (transmute
+         (partial partition 3 1 nil)
+         (partial map-indexed pivot)
+         merge-triplets
+         (partial keep (comp x-mas? val)))
+        (partial merge {:parser nil :filename "resources/day4.txt"})))
