@@ -13,11 +13,11 @@
   [& functions]
   (let [pipe-fn (some->> functions reverse (apply comp))]
     (fn transmutor
-      [{:keys [filename parser reducer]
+      [{:keys [filename test-coll parser reducer]
         :or   {parser  default-parser
                reducer +}}]
-      (-> filename string? assert)
-      (cond->> (read-lines filename)
+      ;; (-> filename string? assert)
+      (cond->> (or test-coll (read-lines filename))
         parser  (map parser)
         pipe-fn pipe-fn
         reducer (reduce reducer)))))
