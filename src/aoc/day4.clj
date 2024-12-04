@@ -1,7 +1,5 @@
 (ns aoc.day4
-  (:require [aoc.utils :refer [transmute]]
-            [clojure.edn :as edn]
-            [clojure.string :as str]))
+  (:require [aoc.utils :refer [transmute]]))
 
 ;; Day 4 - Part one;
 (defn- rotate
@@ -18,66 +16,47 @@
         (concat prefix coll postfix)))))
 
 (def pivot* (memoize (partial apply mapv vector)))
+(defn- diagonal [range lines] (->> lines (pmap rotate range) pivot*))
 
-(defn- pivot [lines]
-  {:horizontal     (pmap seq lines)
-   :vertical       (pivot* lines)
-   :diagonal-right (->> lines (pmap rotate (range 4)) pivot*)
-   :diagonal-left  (->> lines (pmap rotate (range 0 -4 -1)) pivot*)})
+(defn- pivot
+  "Returns pivoted sequences (like permutations) based on the lines; horizontal, vertial and diagonal."
+  [lines]
+  {:horizontal (pmap seq lines)
+   :vertical   (pivot* lines)
+   :diagonal   (concat (diagonal (range 4) lines) (diagonal (range 0 -4 -1) lines))})
 
 (def check* (memoize (comp seq (partial filter #{[\X \M \A \S] [\S \A \M \X]}))))
 
-(defn- check [offset {:keys [horizontal vertical diagonal-right diagonal-left] :as m}]
-
+;; TODO: Reduce instead of map?
+(defn- check [offset {:keys [horizontal vertical diagonal]}]
   {:horizontal-matches (some->> horizontal
-                                (map-indexed (fn [i coll] {:index (+ i offset) :coll (drop-last 1 (partition 4 1 coll))}))
+                                (map-indexed (fn [i coll] {:index (+ i offset) :coll (partition 4 1 nil coll)}))
                                 (pmap #(update % :coll check*))
-                                (filter :coll))
-   :vertical-matches (some->> vertical check*)
-   :diagonal-right-matches (some->> diagonal-right check*)
-   :diagonal-left-matches (some->> diagonal-left check*)})
+                                (filter :coll)
+                                (pmap (juxt :index (comp count :coll)))
+                                (into {}))
+   :vertical-matches (->> vertical check* count)
+   :diagonal-matches (->> diagonal check* count)})
 
 (defn- clean-horizontal-matches [{hm1 :horizontal-matches :as m1}
-                                 {:keys [horizontal-matches] :as m2}]
-  (-> (merge-with concat m1 (select-keys m2 [:vertical-matches :diagonal-left-matches :diagonal-right-matches]))
-      (assoc :horizontal-matches (into (or hm1 {}) (pmap (juxt :index :coll) horizontal-matches)))))
+                                 {hm2 :horizontal-matches :as m2}]
+  (-> (merge-with + m1 (select-keys m2 [:vertical-matches :diagonal-matches]))
+      (assoc :horizontal-matches (merge hm1 hm2))))
 
 (defn- sum-horizontal-matches [{:keys [horizontal-matches] :as m}]
   (assoc m :horizontal-matches
          (some->> horizontal-matches
                   vals
-                  (mapcat identity)
-                  seq)))
+                  (reduce +))))
 
 (def part-one
-  (comp (transmute (partial partition 4 1)
-                   (partial drop-last 1)
+  (comp (transmute identity
+                   (partial partition 4 1 nil)
                    (partial pmap pivot)
                    (partial map-indexed check)
                    (partial reduce clean-horizontal-matches nil)
                    (partial sum-horizontal-matches)
-                   (partial vals)
-                   (partial pmap count))
+                   (partial vals))
         (partial merge {:parser nil :filename "resources/day4.txt"})))
 
-(comment
-  (let [lines ["MMMSXXMASM"
-               "MSAMXMSMSA"
-               "AMXSXMAAMM"
-               "MSAMASMSMX"
-               "XMASAMXAMM"
-               "XXAMMXXAMA"
-               "SMSMSASXSS"
-               "SAXAMASAAA"
-               "MAMMMXMMMM"
-               "MXMXAXMASX"]]
-    (->> lines
-         (partition 4 1 lines)
-         (drop-last 1)
-         (pmap pivot)
-         (map-indexed check)
-         (reduce clean-horizontal-matches nil)
-         sum-horizontal-matches
-         vals
-         (pmap count)
-         (reduce +))))
+;; (part-one nil) 
