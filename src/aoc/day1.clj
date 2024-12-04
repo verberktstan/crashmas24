@@ -6,7 +6,8 @@
 
 (def distance (comp abs -))
 
-(def part-one (transmute pivot (partial map sort) (partial apply map distance)))
+(def part-one
+  (comp (transmute pivot (partial map sort) (partial apply map distance))) (constantly {:filename "day1.txt"}))
 
 ;; Day 1 - Part two; pivot, similarity
 (defn- location-lookup [right]
@@ -18,4 +19,4 @@
   (let [[left right] (map frequencies coll)]
     (->> left (reduce-kv (location-lookup right) nil) vals)))
 
-(def part-two (transmute pivot similarity))
+(def part-two (comp (transmute pivot similarity)) (constantly {:filename "day1.txt"}))
