@@ -3,6 +3,8 @@
             [clojure.edn :as edn]
             [clojure.string :as str]))
 
+(def day3 {:filename "day3.txt"})
+
 ;; Day 3 - Part one;
 (def mul-re #"mul\(\d{1,3}\,\d{1,3}\)")
 (def do-re #"do\(\)|don\'t\(\)")
@@ -14,7 +16,7 @@
 
 (def part-one
   (comp (transmute (partial mapcat (partial map mul)))
-        (partial merge {:parser (parse-line nil)})))
+        (constantly (merge day 3{:parser (parse-line nil)}))))
 
 
 ;; Day 3 - Part one; enable/disable mul based of do() and don't()
@@ -29,4 +31,4 @@
 
 (def part-two
   (comp (transmute (partial mapcat #_mul2 (comp :result do-dont-mul)))
-        (partial merge {:parser (parse-line :part2)})))
+        (constantly (merge day3 {:parser (parse-line :part2)}))))
