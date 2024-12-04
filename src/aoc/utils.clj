@@ -11,13 +11,12 @@
 ;; Wrapper that reads, parses and finally reduces lines.
 (defn transmute
   [& functions]
-  (let [pipe-fn (some->> functions reverse (apply comp))]
+  (let [pipe-fn (some->> functions seq reverse (apply comp))]
     (fn transmutor
       [{:keys [filename parser reducer]
         :or   {parser  default-parser
                reducer +}}]
-      (-> filename string? assert)
-      (cond->> (read-lines filename)
+      (cond->> (read-lines (str "resources/” filename))
         parser  (map parser)
         pipe-fn pipe-fn
         reducer (reduce reducer)))))
