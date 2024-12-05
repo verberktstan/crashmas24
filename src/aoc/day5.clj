@@ -7,4 +7,4 @@
 
 (def part-one
   (comp (transmute identity
-        (partial merge {:parser nil :reducer nil})))
+        (partial merge {:parser nil :reducer nil}))))
