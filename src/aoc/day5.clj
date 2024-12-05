@@ -34,6 +34,13 @@
 (defn- validate [{:keys [updates] :as m}]
   (update m :updates (partial filter (partial valid? m))))
 
+(defn- median [coll]
+  (when-let [vect (and (seq coll) (vec coll))]
+    (vect (quot (count vect) 2))))
+
+(defn- medians [m]
+  (update m :updates (partial map median)))
+
 (def part-one
-  (comp (transmute build-rules validate)
-        (partial merge {:parser parse-line :reducer nil})))
+  (comp (transmute build-rules validate medians)
+        (partial merge {:parser parse-line})))
