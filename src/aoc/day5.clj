@@ -19,5 +19,5 @@
     coll))
 
 (def part-one
-  (comp (transmute build-rules
+  (comp (transmute identity
         (partial merge {:parser parse-line :reducer nil}))))
