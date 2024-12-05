@@ -4,11 +4,11 @@
             [clojure.string :as str]))
 
 ;; Day 5 - Part one;
-(defn parse-line [s]
+(defn- parse-line [s]
   (when-let [coll (and (seq s) (str/split s #"\,|\|"))] 
     (assoc nil (if (str/includes? s "|") :rule :update) (map edn/read-string coll))))
 
-(defn build-rules [coll]
+(defn- build-rules [coll]
   (reduce
     (fn [m {[a b :as rule] :rule update-coll :update}] 
       (cond-> m
@@ -18,6 +18,22 @@
     nil
     coll))
 
+(defn- check [{:keys [lookup seen invalid?] :as m} x]
+  (if invalid?
+    (reduced m)
+    (cond-> (update m :seen (comp set into) #{x})
+      (and seen (lookup x) (some seen (lookup x))) (assoc :invalid? true))))
+
+(defn- valid? [{:keys [pre post]} coll]
+  (->> [(reduce check {:lookup pre} coll)
+        (reduce check {:lookup post} (reverse coll))]
+    (keep :invalid?)
+    seq
+    not))
+
+(defn- validate [{:keys [updates] :as m}]
+  (update m :updates (partial filter (partial valid? m))))
+
 (def part-one
-  (comp (transmute build-rules)
+  (comp (transmute build-rules validate)
         (partial merge {:parser parse-line :reducer nil})))
