@@ -38,9 +38,6 @@
   (when-let [vect (and (seq coll) (vec coll))]
     (vect (quot (count vect) 2))))
 
-(defn- medians [m]
-  (update m :updates (partial map median)))
-
 (def part-one
-  (comp (transmute build-rules validate medians)
+  (comp (transmute build-rules validate :updates (partial map median))
         (partial merge {:parser parse-line})))
