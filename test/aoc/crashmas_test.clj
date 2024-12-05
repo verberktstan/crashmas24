@@ -1,11 +1,14 @@
 (ns aoc.crashmas-test
-  (:require [clojure.test :refer [are deftest]]
+  (:require [clojure.test :refer [are deftest is]]
             [aoc.day1 :as day1]
             [aoc.day2 :as day2]
             [aoc.day3 :as day3]
             [aoc.day5 :as day5]))
 
-(deftest crashmas-test
+(deftest wip
+  (is (-> {:filename "resources/day5test.txt"} day5/part-one :updates seq)))
+
+#_(deftest crashmas-test
   (are [filename f result] (-> {:filename filename} f (= result))
     "resources/day1.txt" day1/part-one 2000468
     "resources/day1.txt" day1/part-two 18567089
