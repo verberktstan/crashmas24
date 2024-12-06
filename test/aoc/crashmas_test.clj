@@ -5,10 +5,7 @@
             [aoc.day3 :as day3]
             [aoc.day5 :as day5]))
 
-(deftest wip
-  (is (= 123 (-> {:filename "resources/day5.txt"} day5/part-two))))
-
-#_(deftest crashmas-test
+(deftest crashmas-test
   (are [filename f result] (-> {:filename filename} f (= result))
     "resources/day1.txt" day1/part-one 2000468
     "resources/day1.txt" day1/part-two 18567089
@@ -21,4 +18,5 @@
 
     "resources/day5test.txt" day5/part-one 143
     "resources/day5.txt" day5/part-one 5275
-    "resources/day5test.txt" day5/part-two 123))
+    "resources/day5test.txt" day5/part-two 123
+    "resources/day5.txt" day5/part-two 6191))
