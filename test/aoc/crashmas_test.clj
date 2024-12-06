@@ -6,7 +6,7 @@
             [aoc.day5 :as day5]))
 
 (deftest wip
-  (is (-> {:filename "resources/day5.txt"} day5/part-two (= 123))))
+  (is (= 123 (-> {:filename "resources/day5.txt"} day5/part-two))))
 
 #_(deftest crashmas-test
   (are [filename f result] (-> {:filename filename} f (= result))
