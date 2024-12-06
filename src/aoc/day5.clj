@@ -6,17 +6,16 @@
 ;; Day 5 - Part one;
 (defn- parse-line [s]
   (when-let [coll (and (seq s) (str/split s #"\,|\|"))] 
-    (assoc nil (if (str/includes? s "|") :rule :update) (map edn/read-string coll))))
+    {(if (str/includes? s "|") :rule :update) (map edn/read-string coll)}))
 
-(defn- build-rules [coll]
-  (reduce
+(def build-rules
+  (partial reduce
     (fn [m {[a b :as rule] :rule update-coll :update}] 
       (cond-> m
         rule (update-in [:pre a] (comp set into) #{b}) 
         rule (update-in [:post b] (comp set into) #{a}) 
         update-coll (update :updates conj update-coll)))
-    nil
-    coll))
+    nil))
 
 (defn- check [{:keys [lookup seen invalid?] :as m} x]
   (if invalid?
