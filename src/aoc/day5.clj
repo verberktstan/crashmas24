@@ -40,3 +40,15 @@
 (def part-one
   (comp (transmute build-rules validate :updates (partial map median))
         (partial merge {:parser parse-line})))
+
+(defn invalidate [{:keys [updates] :as m}]
+  (update m :updates (partial remove (partial valid? m))))
+
+(defn comparer [lookup]
+  (fn [x y] (if (some-> x lookup (some [y])) 1 -1)))
+
+(defn reorder [{:keys [post] :as m}] (update m :updates (partial map (partial sort (comparer post)))))
+
+(def part-two
+  (comp (transmute build-rules invalidate reorder :updates (partial map median))
+        (partial merge {:parser parse-line})))
