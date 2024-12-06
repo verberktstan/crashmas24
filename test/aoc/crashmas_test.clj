@@ -6,7 +6,7 @@
             [aoc.day5 :as day5]))
 
 (deftest wip
-  (is (= 143 (day5/part-one nil))))
+  (is (= 143 (day5/part-one {:filename "resources/day5.txt"}))))
 
 (deftest crashmas-test
   (are [filename f result] (-> {:filename filename} f (= result))
