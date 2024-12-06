@@ -21,10 +21,10 @@
     (mapv + [x y] offset)))
 
 (def GUARD #:guard{:up :guard/right, :right :guard/down, :down :guard/left, :left :guard/up})
+(def position (juxt :pos/x :pos/y))
 
 (defn- walk* [lookup]
-  (let [position (juxt :pos/x :pos/y)
-        guard (->> lookup vals (filter (comp GUARD :whats/here)) first)
+  (let [guard (->> lookup vals (filter (comp GUARD :whats/here)) first)
         next-pos (project guard)
         whats-there (-> next-pos lookup :whats/here)]
     (case whats-there
@@ -49,4 +49,25 @@
 
 (def part-one
   (comp (transmute enrich-y-position create-lookup walk guard-marks)
-        (partial merge {:parser parse-line :reducer +})))
+        (partial merge {:parser parse-line})))
+
+(defn- proposed-obstructions [lookup]
+  (assoc lookup :proposed-obstructions
+         (->> lookup
+              vals
+              (filter (comp #{:void} :whats/here))
+              (map position))))
+
+(defn- walk-all [{:keys [proposed-obstructions] :as lookup}]
+  (for [position proposed-obstructions]
+    (or (and
+     (-> lookup (update position merge {:whats/here :obstruction}) walk :guard/off-the-grid? not)
+     1) 0)))
+
+(def part-two
+  (comp (transmute enrich-y-position create-lookup proposed-obstructions walk-all #_walk #_guard-marks)
+        (partial merge {:parser parse-line})))
+
+(comment
+  (part-two {:filename "resources/day6test.txt"}) 
+  )
