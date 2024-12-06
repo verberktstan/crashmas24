@@ -20,11 +20,7 @@
   (let [offset (get #:guard{:up [0 -1] :right [1 0] :down [0 1] :left [-1 0]} guard)]
     (mapv + [x y] offset)))
 
-;; (project {:pos/x 1 :pos/y 2 :whats/here \^})
 (def GUARD #:guard{:up :guard/right, :right :guard/down, :down :guard/left, :left :guard/up})
-
-(defn- turn [{:whats/keys [here] :as m}]
-  (update m :whats/here GUARD))
 
 (defn- walk* [lookup]
   (let [position (juxt :pos/x :pos/y)
@@ -38,11 +34,11 @@
       :void (-> lookup
                 (assoc-in [(position guard) :whats/here] :guards/mark)
                 (assoc next-pos (merge guard (zipmap [:pos/x :pos/y] next-pos))))
-      :obstruction (-> lookup (update (position guard) turn))
+      :obstruction (-> lookup (update-in [(position guard) :whats/here] GUARD))
       (assoc lookup :guard/off-the-grid? true))))
 
 (defn- walk [lookup]
-  (loop [i 55, lookup' lookup]
+  (loop [i 99999, lookup' lookup]
     (if (or (:guard/off-the-grid? lookup') (zero? i))
       lookup'
       (recur (dec i) (walk* lookup')))))
@@ -54,6 +50,3 @@
 (def part-one
   (comp (transmute enrich-y-position create-lookup walk guard-marks)
         (partial merge {:parser parse-line :reducer +})))
-
-(comment
-  (part-one {:filename "resources/day6test.txt"}))
