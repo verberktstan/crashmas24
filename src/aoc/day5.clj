@@ -40,3 +40,10 @@
 (def part-one
   (comp (transmute build-rules validate :updates (partial map median))
         (partial merge {:parser parse-line})))
+
+(defn invalidate [{:keys [updates] :as m}]
+  (update m :updates (partial remove (partial valid? m))))
+
+(def part-two
+  (comp (transmute build-rules invalidate :updates (partial map median))
+        (partial merge {:parser parse-line})))
